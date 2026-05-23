@@ -1,4 +1,4 @@
-const CACHE_NAME = "math-challenge-sean-v1";
+const CACHE_NAME = "math-challenge-sean-v7";
 
 const APP_ASSETS = [
   "./",
@@ -6,6 +6,7 @@ const APP_ASSETS = [
   "./styles.css",
   "./script.js",
   "./manifest.webmanifest",
+  "./assets/trex-premium.png",
   "./icons/icon.svg",
   "./icons/icon-192.png",
   "./icons/icon-512.png"
@@ -31,6 +32,21 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") {
+    return;
+  }
+
+  if (event.request.mode === "navigate" || event.request.url.match(/\.(css|js|html)$/)) {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          const responseCopy = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseCopy);
+          });
+          return networkResponse;
+        })
+        .catch(() => caches.match(event.request))
+    );
     return;
   }
 
