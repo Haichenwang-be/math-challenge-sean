@@ -441,7 +441,6 @@ function renderProblem() {
   const expression = currentProblem.expression;
   problemEl.textContent = `${expression.first} ${expression.operator} ${expression.second} = ${expression.result}`;
   answerInput.value = "";
-  answerInput.focus();
 }
 
 function updateStats() {
@@ -601,7 +600,6 @@ function handleWrongAnswer() {
   void answerInput.offsetWidth;
   answerInput.classList.add("shake");
   answerInput.value = "";
-  answerInput.focus();
 
   if (mistakes > maxMistakes) {
     completedMissions = 0;
@@ -612,7 +610,6 @@ function handleWrongAnswer() {
 
 function checkAnswer() {
   if (!currentProblem || answerInput.value.trim() === "") {
-    answerInput.focus();
     return;
   }
 
@@ -642,12 +639,10 @@ function addDigit(digit) {
     answerInput.value += digit;
     sanitizeAnswer();
   }
-  answerInput.focus();
 }
 
 function clearAnswer() {
   answerInput.value = "";
-  answerInput.focus();
 }
 
 function pressNumber(event, digit) {
@@ -696,11 +691,33 @@ function runDemoMode() {
 window.pressNumber = pressNumber;
 window.eraseAnswer = eraseAnswer;
 
+["pointerdown", "mousedown", "touchstart"].forEach((eventName) => {
+  answerInput.addEventListener(eventName, (event) => {
+    event.preventDefault();
+  }, { passive: false });
+});
+
 answerInput.addEventListener("input", () => {
   sanitizeAnswer();
 });
 
 answerInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    checkAnswer();
+  }
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key >= "0" && event.key <= "9") {
+    addDigit(event.key);
+    return;
+  }
+
+  if (event.key === "Backspace" || event.key === "Delete") {
+    clearAnswer();
+    return;
+  }
+
   if (event.key === "Enter") {
     checkAnswer();
   }
@@ -717,6 +734,6 @@ runDemoMode();
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./service-worker.js?v=7");
+    navigator.serviceWorker.register("./service-worker.js?v=8");
   });
 }

@@ -1,4 +1,4 @@
-const CACHE_NAME = "math-challenge-sean-v7";
+const CACHE_NAME = "math-challenge-sean-v8";
 
 const APP_ASSETS = [
   "./",

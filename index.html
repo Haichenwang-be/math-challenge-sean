@@ -9,8 +9,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>Math Challenge de Sean</title>
     <link rel="manifest" href="manifest.webmanifest">
-    <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <link rel="icon" href="icons/icon.svg?v=8" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="icons/icon-192.png?v=8">
     <link rel="stylesheet" href="styles.css?v=7">
   </head>
   <body>
@@ -55,10 +55,11 @@
             id="answerInput"
             type="text"
             class="answer-input"
-            inputmode="numeric"
-            pattern="[0-9]*"
+            inputmode="none"
             maxlength="2"
             autocomplete="off"
+            readonly
+            tabindex="-1"
             aria-label="Ta réponse"
           >
           <button id="checkButton" class="primary-button" type="button">OK</button>
