@@ -1,0 +1,2257 @@
+:root {
+  --ink: #172033;
+  --muted: #5d667a;
+  --paper: #fffdf7;
+  --sky: #8fd6ff;
+  --leaf: #25b66d;
+  --sun: #ffd54a;
+  --coral: #ff6b6b;
+  --blue: #2868d8;
+  --shadow: 0 20px 60px rgba(23, 32, 51, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  font-family: ui-rounded, "SF Pro Rounded", "Nunito", system-ui, sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255, 213, 74, 0.45), transparent 22rem),
+    radial-gradient(circle at 86% 12%, rgba(143, 214, 255, 0.62), transparent 24rem),
+    linear-gradient(135deg, #fff6d8 0%, #d7f5ff 45%, #e8ffe8 100%);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: 0;
+}
+
+.game-shell {
+  width: min(1040px, calc(100% - 28px));
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 24px 0;
+  display: grid;
+  align-content: center;
+  gap: 18px;
+}
+
+.topbar,
+.challenge-panel,
+.challenge-strip {
+  background: rgba(255, 253, 247, 0.86);
+  border: 3px solid rgba(23, 32, 51, 0.08);
+  box-shadow: var(--shadow);
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 22px;
+  border-radius: 28px;
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  color: var(--blue);
+  font-size: 0.92rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2rem, 6vw, 4.4rem);
+  line-height: 0.9;
+}
+
+.scoreboard {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(88px, 1fr));
+  gap: 10px;
+}
+
+.scoreboard > div {
+  min-height: 72px;
+  padding: 10px 8px;
+  border-radius: 18px;
+  color: white;
+  background: var(--ink);
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+.score-label {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.74rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.scoreboard strong {
+  font-size: 1.5rem;
+}
+
+.challenge-panel {
+  position: relative;
+  overflow: hidden;
+  border-radius: 34px;
+  padding: clamp(18px, 4vw, 40px);
+  display: grid;
+  justify-items: center;
+  gap: 24px;
+}
+
+.mascot {
+  width: min(190px, 42vw);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+}
+
+.rocket {
+  position: relative;
+  width: 78px;
+  height: 138px;
+  border-radius: 52% 52% 38% 38%;
+  background: linear-gradient(var(--rocket-top, #fffcf0), var(--rocket-bottom, #ffb84d));
+  border: 5px solid var(--ink);
+  transform: rotate(22deg);
+  animation: float 2.4s ease-in-out infinite;
+  transition: background 220ms ease, border-radius 220ms ease, width 220ms ease, height 220ms ease;
+}
+
+.rocket::before,
+.rocket::after {
+  content: "";
+  position: absolute;
+  bottom: 15px;
+  width: 32px;
+  height: 44px;
+  background: var(--rocket-wing, var(--blue));
+  border: 5px solid var(--ink);
+  border-radius: var(--rocket-wing-radius, 12px);
+  transition: background 220ms ease, border-radius 220ms ease;
+}
+
+.rocket::before {
+  left: -25px;
+  transform: rotate(-20deg);
+}
+
+.rocket::after {
+  right: -25px;
+  transform: rotate(20deg);
+}
+
+.window {
+  position: absolute;
+  top: 32px;
+  left: 19px;
+  width: 31px;
+  height: 31px;
+  border-radius: 50%;
+  background: var(--rocket-window, var(--sky));
+  border: 5px solid var(--ink);
+  transition: background 220ms ease;
+}
+
+.flame {
+  position: absolute;
+  bottom: -50px;
+  left: 18px;
+  width: 33px;
+  height: 56px;
+  border-radius: 50% 50% 46% 46%;
+  background: linear-gradient(var(--rocket-flame, var(--coral)), var(--sun));
+  animation: flame 0.24s alternate infinite;
+}
+
+.rocket[data-stage="1"] {
+  --rocket-top: #f0fff5;
+  --rocket-bottom: #25b66d;
+  --rocket-wing: #ffd54a;
+  --rocket-window: #8fd6ff;
+  --rocket-flame: #ff6b6b;
+  border-radius: 58% 58% 34% 34%;
+}
+
+.rocket[data-stage="2"] {
+  --rocket-top: #f3f0ff;
+  --rocket-bottom: #7a5cff;
+  --rocket-wing: #ff8a65;
+  --rocket-window: #c5f6ff;
+  --rocket-flame: #ff4d8d;
+  border-radius: 48% 48% 44% 44%;
+}
+
+.rocket[data-stage="3"] {
+  --rocket-top: #fff4d8;
+  --rocket-bottom: #ff8c42;
+  --rocket-wing: #25b66d;
+  --rocket-window: #ffffff;
+  --rocket-flame: #2868d8;
+  border-radius: 64% 64% 28% 28%;
+}
+
+.rocket[data-stage="4"] {
+  --rocket-top: #e7fbff;
+  --rocket-bottom: #00a7c7;
+  --rocket-wing: #ffd54a;
+  --rocket-window: #172033;
+  --rocket-flame: #ff6b6b;
+  width: 84px;
+}
+
+.rocket[data-stage="5"] {
+  --rocket-top: #fff0f6;
+  --rocket-bottom: #e64d8a;
+  --rocket-wing: #2868d8;
+  --rocket-window: #ffd54a;
+  --rocket-flame: #25b66d;
+  height: 146px;
+  border-radius: 54% 54% 30% 30%;
+}
+
+.rocket-boost {
+  animation: rocketBoost 520ms ease, float 2.4s ease-in-out infinite 520ms;
+}
+
+.progress-wrap {
+  width: min(640px, 100%);
+  display: grid;
+  gap: 8px;
+  text-align: center;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.progress-track {
+  height: 18px;
+  padding: 3px;
+  border-radius: 99px;
+  background: #e8edf2;
+}
+
+.progress-fill {
+  width: 0%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--leaf), var(--sun));
+  transition: width 250ms ease;
+}
+
+.problem {
+  width: min(650px, 100%);
+  min-height: 150px;
+  border-radius: 28px;
+  display: grid;
+  place-items: center;
+  font-size: clamp(3.7rem, 14vw, 8.6rem);
+  font-weight: 1000;
+  line-height: 1;
+  background: white;
+  border: 6px solid var(--ink);
+  box-shadow: 0 14px 0 rgba(23, 32, 51, 0.13);
+}
+
+.answer-row {
+  width: min(430px, 100%);
+  display: grid;
+  grid-template-columns: 1fr 96px;
+  gap: 12px;
+}
+
+.answer-input {
+  min-width: 0;
+  height: 78px;
+  border: 5px solid var(--ink);
+  border-radius: 22px;
+  font-size: 2.5rem;
+  font-weight: 1000;
+  text-align: center;
+  color: var(--ink);
+  background: white;
+}
+
+.answer-input:focus {
+  outline: 5px solid rgba(40, 104, 216, 0.22);
+}
+
+.primary-button,
+.secondary-button,
+.number-pad button {
+  min-height: 58px;
+  border-radius: 18px;
+  font-weight: 1000;
+  box-shadow: 0 7px 0 rgba(23, 32, 51, 0.18);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.primary-button {
+  color: white;
+  background: var(--blue);
+}
+
+.secondary-button {
+  padding: 0 18px;
+  color: var(--ink);
+  background: var(--sun);
+}
+
+.primary-button:active,
+.secondary-button:active,
+.number-pad button:active {
+  transform: translateY(5px);
+  box-shadow: 0 2px 0 rgba(23, 32, 51, 0.18);
+}
+
+.number-pad {
+  width: min(430px, 100%);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  touch-action: manipulation;
+}
+
+.number-pad button {
+  aspect-ratio: 1.45;
+  color: var(--ink);
+  background: white;
+  border: 3px solid rgba(23, 32, 51, 0.12);
+  font-size: 1.3rem;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.number-pad [data-action="clear"] {
+  background: #f4f7fb;
+  font-size: 1rem;
+}
+
+.challenge-strip {
+  min-height: 88px;
+  padding: 16px 20px;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.badge {
+  display: inline-grid;
+  place-items: center;
+  margin-right: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  color: white;
+  background: var(--coral);
+  font-weight: 1000;
+}
+
+.feedback-overlay,
+.victory-overlay,
+.mega-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: none;
+  place-items: center;
+  padding: 24px;
+}
+
+.feedback-overlay.show,
+.victory-overlay.show,
+.mega-overlay.show {
+  display: grid;
+}
+
+.feedback-card,
+.victory-card {
+  width: min(480px, 100%);
+  border: 7px solid var(--ink);
+  border-radius: 34px;
+  background: white;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.feedback-card {
+  padding: 28px;
+  animation: pop 780ms ease both;
+}
+
+.feedback-card.good {
+  background: #efffed;
+}
+
+.feedback-card.bad {
+  background: #fff0f0;
+  animation: nope 620ms ease both;
+}
+
+.feedback-icon {
+  width: 110px;
+  height: 110px;
+  margin: 0 auto 12px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: white;
+  background: var(--leaf);
+  font-size: 4.2rem;
+  line-height: 1;
+}
+
+.feedback-card.bad .feedback-icon {
+  background: var(--coral);
+}
+
+.feedback-card p,
+.victory-card h2 {
+  margin: 0;
+  font-size: clamp(2.2rem, 8vw, 4.6rem);
+  line-height: 1;
+  font-weight: 1000;
+}
+
+.feedback-card span,
+.victory-card p {
+  display: block;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 1.15rem;
+  font-weight: 850;
+}
+
+.victory-overlay {
+  background:
+    radial-gradient(circle at 50% 30%, rgba(255, 213, 74, 0.34), transparent 22rem),
+    rgba(13, 52, 38, 0.72);
+}
+
+.victory-card {
+  position: relative;
+  z-index: 2;
+  width: min(920px, calc(100vw - 28px));
+  padding: clamp(14px, 3vw, 26px);
+  animation: victoryPop 900ms ease both;
+  overflow: hidden;
+}
+
+.dino-scene {
+  position: relative;
+  width: 100%;
+  height: clamp(330px, 55vh, 520px);
+  margin: 0 auto 18px;
+  border-radius: 30px;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, #6ec8ff 0%, #bfefff 38%, #88d66e 39%, #3d9e53 64%, #1f6a43 100%);
+  border: 6px solid var(--ink);
+  box-shadow: inset 0 -28px 0 rgba(0, 0, 0, 0.08);
+  isolation: isolate;
+}
+
+.jungle-sky,
+.jungle-layer,
+.jungle-vines,
+.trex-track,
+.jungle-floor {
+  position: absolute;
+  inset: 0;
+}
+
+.sunburst {
+  position: absolute;
+  top: 28px;
+  right: 9%;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: var(--sun);
+  box-shadow: 0 0 0 24px rgba(255, 213, 74, 0.28), 0 0 80px rgba(255, 213, 74, 0.6);
+  animation: sunPulse 1.4s ease-in-out infinite;
+}
+
+.cloud {
+  position: absolute;
+  width: 122px;
+  height: 38px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  filter: blur(0.2px);
+  animation: cloudDrift 18s linear infinite;
+}
+
+.cloud::before,
+.cloud::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: inherit;
+}
+
+.cloud::before {
+  left: 22px;
+  top: -18px;
+  width: 50px;
+  height: 50px;
+}
+
+.cloud::after {
+  right: 18px;
+  top: -12px;
+  width: 42px;
+  height: 42px;
+}
+
+.cloud-one {
+  left: 8%;
+  top: 50px;
+}
+
+.cloud-two {
+  left: 52%;
+  top: 96px;
+  transform: scale(0.72);
+  animation-duration: 24s;
+  animation-delay: -8s;
+}
+
+.bird {
+  position: absolute;
+  width: 28px;
+  height: 12px;
+  border-top: 4px solid var(--ink);
+  border-radius: 50% 50% 0 0;
+  opacity: 0.72;
+  animation: birdGlide 8s ease-in-out infinite;
+}
+
+.bird::after {
+  content: "";
+  position: absolute;
+  left: 16px;
+  top: -4px;
+  width: 28px;
+  height: 12px;
+  border-top: 4px solid var(--ink);
+  border-radius: 50% 50% 0 0;
+}
+
+.bird-one {
+  left: 22%;
+  top: 92px;
+}
+
+.bird-two {
+  left: 70%;
+  top: 62px;
+  transform: scale(0.76);
+  animation-delay: -2s;
+}
+
+.jungle-back {
+  bottom: 122px;
+  top: auto;
+  height: 210px;
+  opacity: 0.86;
+}
+
+.jungle-back span,
+.jungle-mid span {
+  position: absolute;
+  bottom: 0;
+  width: 120px;
+  height: 190px;
+  background: #266b48;
+  clip-path: polygon(50% 0, 65% 28%, 56% 28%, 78% 58%, 66% 58%, 96% 100%, 4% 100%, 34% 58%, 22% 58%, 44% 28%, 35% 28%);
+}
+
+.jungle-back span:nth-child(1) {
+  left: -2%;
+  transform: scale(1.1);
+}
+
+.jungle-back span:nth-child(2) {
+  left: 16%;
+  transform: scale(0.86);
+}
+
+.jungle-back span:nth-child(3) {
+  left: 36%;
+  transform: scale(1.18);
+}
+
+.jungle-back span:nth-child(4) {
+  left: 61%;
+  transform: scale(0.94);
+}
+
+.jungle-back span:nth-child(5) {
+  right: -4%;
+  transform: scale(1.24);
+}
+
+.jungle-mid {
+  bottom: 92px;
+  top: auto;
+  height: 160px;
+  animation: jungleSway 3.4s ease-in-out infinite;
+}
+
+.jungle-mid span {
+  width: 138px;
+  height: 150px;
+  background: #1d8d54;
+  filter: drop-shadow(0 8px 0 rgba(0, 0, 0, 0.08));
+}
+
+.jungle-mid span:nth-child(1) {
+  left: 5%;
+}
+
+.jungle-mid span:nth-child(2) {
+  left: 29%;
+  transform: scale(1.12);
+}
+
+.jungle-mid span:nth-child(3) {
+  left: 56%;
+  transform: scale(0.96);
+}
+
+.jungle-mid span:nth-child(4) {
+  right: 0;
+  transform: scale(1.08);
+}
+
+.jungle-vines span {
+  position: absolute;
+  top: -8px;
+  width: 14px;
+  height: 150px;
+  border-radius: 999px;
+  background: linear-gradient(#185f3c, #26a460);
+  transform-origin: top center;
+  animation: vineSwing 2.8s ease-in-out infinite;
+}
+
+.jungle-vines span::after {
+  content: "";
+  position: absolute;
+  left: -12px;
+  bottom: 18px;
+  width: 36px;
+  height: 20px;
+  border-radius: 50%;
+  background: #2fc46d;
+  transform: rotate(-25deg);
+}
+
+.jungle-vines span:nth-child(1) {
+  left: 8%;
+}
+
+.jungle-vines span:nth-child(2) {
+  left: 28%;
+  height: 110px;
+  animation-delay: -0.8s;
+}
+
+.jungle-vines span:nth-child(3) {
+  right: 24%;
+  height: 132px;
+  animation-delay: -1.4s;
+}
+
+.jungle-vines span:nth-child(4) {
+  right: 8%;
+  height: 100px;
+  animation-delay: -2s;
+}
+
+.trex-track {
+  top: auto;
+  height: 270px;
+  bottom: 42px;
+  overflow: hidden;
+  z-index: 4;
+}
+
+.trex {
+  --trex-green: #2fbf71;
+  --trex-dark: #13834b;
+  --trex-belly: #9be37a;
+  --trex-highlight: rgba(255, 255, 255, 0.24);
+  position: absolute;
+  left: -330px;
+  bottom: 18px;
+  width: 330px;
+  height: 220px;
+  transform-origin: 50% 100%;
+  animation: trexWalkAcross 6.5s linear infinite;
+}
+
+.trex > span {
+  position: absolute;
+  display: block;
+}
+
+.trex-shadow {
+  left: 70px;
+  bottom: -8px;
+  width: 240px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(8, 35, 24, 0.26);
+  filter: blur(2px);
+  animation: groundShadowPulse 520ms ease-in-out infinite;
+}
+
+.trex-body {
+  left: 104px;
+  bottom: 52px;
+  width: 150px;
+  height: 104px;
+  border: 6px solid var(--ink);
+  border-radius: 56% 44% 48% 50%;
+  background: linear-gradient(135deg, #42cf7f 0%, var(--trex-green) 55%, var(--trex-dark) 100%);
+  box-shadow: inset -18px -12px 0 rgba(0, 0, 0, 0.08);
+  animation: torsoBreath 520ms ease-in-out infinite;
+}
+
+.trex-body-shine {
+  left: 128px;
+  bottom: 124px;
+  width: 72px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--trex-highlight);
+  transform: rotate(-10deg);
+  z-index: 4;
+  animation: bodyShineBreath 520ms ease-in-out infinite;
+}
+
+.trex-belly {
+  left: 150px;
+  bottom: 66px;
+  width: 74px;
+  height: 52px;
+  border-radius: 55% 45% 50% 50%;
+  background: rgba(155, 227, 122, 0.85);
+  transform: rotate(8deg);
+  z-index: 3;
+  animation: bellyBreath 520ms ease-in-out infinite;
+}
+
+.trex-neck {
+  left: 220px;
+  bottom: 116px;
+  width: 62px;
+  height: 64px;
+  border-radius: 34px;
+  background: var(--trex-green);
+  border: 6px solid var(--ink);
+  transform: rotate(-22deg);
+}
+
+.trex-head {
+  left: 252px;
+  bottom: 150px;
+  width: 92px;
+  height: 72px;
+  border-radius: 46% 58% 38% 48%;
+  background: linear-gradient(135deg, #4bd884, #20ad63);
+  border: 6px solid var(--ink);
+  transform-origin: 10% 75%;
+  animation: trexHeadBob 520ms ease-in-out infinite;
+}
+
+.trex-snout {
+  left: 306px;
+  bottom: 156px;
+  width: 72px;
+  height: 48px;
+  border: 6px solid var(--ink);
+  border-left: 0;
+  border-radius: 0 28px 24px 0;
+  background: #4bd884;
+  transform-origin: left center;
+  animation: trexJawBob 520ms ease-in-out infinite;
+}
+
+.trex-jaw {
+  left: 304px;
+  bottom: 141px;
+  width: 62px;
+  height: 24px;
+  border: 6px solid var(--ink);
+  border-top: 0;
+  border-left: 0;
+  border-radius: 0 0 28px 20px;
+  background: #219b5a;
+  transform-origin: left top;
+  animation: trexJawOpen 520ms ease-in-out infinite;
+}
+
+.trex-eye {
+  left: 300px;
+  bottom: 188px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--ink);
+  box-shadow: 0 0 0 5px #fff;
+  z-index: 3;
+  animation: dinoBlink 4.8s ease-in-out infinite;
+}
+
+.trex-brow {
+  left: 294px;
+  bottom: 203px;
+  width: 34px;
+  height: 8px;
+  border-radius: 999px;
+  background: #0c5f39;
+  z-index: 5;
+  transform: rotate(-10deg);
+  animation: trexHeadBob 520ms ease-in-out infinite;
+}
+
+.trex-nostril {
+  left: 344px;
+  bottom: 181px;
+  width: 8px;
+  height: 6px;
+  border-radius: 50%;
+  background: #0a4d32;
+  z-index: 5;
+  animation: trexJawBob 520ms ease-in-out infinite;
+}
+
+.trex-teeth {
+  width: 52px;
+  height: 12px;
+  left: 314px;
+  background:
+    linear-gradient(135deg, white 0 44%, transparent 45%) 0 0 / 13px 12px repeat-x;
+  z-index: 4;
+}
+
+.teeth-top {
+  bottom: 158px;
+}
+
+.teeth-bottom {
+  bottom: 147px;
+  transform: scaleY(-1);
+}
+
+.trex-tail {
+  left: 12px;
+  bottom: 90px;
+  width: 128px;
+  height: 46px;
+  border: 6px solid var(--ink);
+  border-right: 0;
+  border-radius: 90% 16% 30% 90%;
+  background: linear-gradient(90deg, #168c4f, var(--trex-green));
+  transform-origin: right center;
+  transform: rotate(-12deg);
+  animation: tailSway 520ms ease-in-out infinite;
+}
+
+.trex-arm {
+  width: 45px;
+  height: 18px;
+  border: 5px solid var(--ink);
+  border-left: 0;
+  border-radius: 0 18px 18px 0;
+  background: #20ad63;
+  z-index: 3;
+}
+
+.trex-arm::after,
+.raptor-arm::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  top: 7px;
+  width: 14px;
+  height: 8px;
+  background: white;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+.arm-one {
+  left: 232px;
+  bottom: 104px;
+  transform-origin: left center;
+  animation: armWiggle 500ms ease-in-out infinite;
+}
+
+.arm-two {
+  left: 224px;
+  bottom: 92px;
+  transform: scale(0.8) rotate(16deg);
+  opacity: 0.78;
+  animation: armWiggle 560ms ease-in-out infinite reverse;
+}
+
+.trex-leg {
+  width: 44px;
+  height: 92px;
+  border: 6px solid var(--ink);
+  border-radius: 24px 24px 14px 14px;
+  background: linear-gradient(#28b96b, #15844b);
+  transform-origin: top center;
+  z-index: 2;
+}
+
+.trex-knee {
+  width: 28px;
+  height: 28px;
+  border: 5px solid var(--ink);
+  border-radius: 50%;
+  background: #20a760;
+  z-index: 4;
+}
+
+.knee-front {
+  left: 214px;
+  bottom: 48px;
+  animation: kneeFront 520ms ease-in-out infinite;
+}
+
+.knee-back {
+  left: 146px;
+  bottom: 46px;
+  opacity: 0.9;
+  animation: kneeBack 520ms ease-in-out infinite;
+}
+
+.leg-front {
+  left: 206px;
+  bottom: 2px;
+  animation: legFront 520ms ease-in-out infinite;
+}
+
+.leg-back {
+  left: 138px;
+  bottom: 0;
+  opacity: 0.92;
+  animation: legBack 520ms ease-in-out infinite;
+}
+
+.trex-foot {
+  width: 70px;
+  height: 28px;
+  border: 6px solid var(--ink);
+  border-radius: 30px 16px 14px 14px;
+  background: #15844b;
+  z-index: 3;
+}
+
+.trex-claws {
+  width: 48px;
+  height: 14px;
+  background:
+    linear-gradient(135deg, white 0 48%, transparent 49%) 0 0 / 16px 14px repeat-x;
+  z-index: 6;
+}
+
+.claws-front {
+  left: 242px;
+  bottom: -4px;
+  animation: footFront 520ms ease-in-out infinite;
+}
+
+.claws-back {
+  left: 150px;
+  bottom: -2px;
+  animation: footBack 520ms ease-in-out infinite;
+}
+
+.foot-front {
+  left: 216px;
+  bottom: -4px;
+  animation: footFront 520ms ease-in-out infinite;
+}
+
+.foot-back {
+  left: 126px;
+  bottom: -2px;
+  animation: footBack 520ms ease-in-out infinite;
+}
+
+.trex-stripe {
+  width: 16px;
+  height: 46px;
+  border-radius: 999px;
+  background: rgba(12, 89, 52, 0.55);
+  transform: rotate(18deg);
+  z-index: 3;
+}
+
+.stripe-one {
+  left: 144px;
+  bottom: 122px;
+}
+
+.stripe-two {
+  left: 178px;
+  bottom: 132px;
+  height: 40px;
+}
+
+.stripe-three {
+  left: 210px;
+  bottom: 124px;
+  height: 34px;
+}
+
+.jungle-floor {
+  inset: auto 0 0;
+  height: 116px;
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0 8px, transparent 8px 26px),
+    linear-gradient(180deg, #286d46 0%, #17482f 100%);
+  z-index: 5;
+  box-shadow: inset 0 16px 0 rgba(53, 184, 108, 0.62);
+}
+
+.rock {
+  position: absolute;
+  bottom: 18px;
+  width: 46px;
+  height: 24px;
+  border-radius: 50% 50% 35% 35%;
+  background: #8a8d78;
+  border: 4px solid rgba(23, 32, 51, 0.9);
+}
+
+.rock-one {
+  left: 16%;
+}
+
+.rock-two {
+  right: 22%;
+  transform: scale(0.82);
+}
+
+.fern {
+  position: absolute;
+  bottom: 24px;
+  width: 20px;
+  height: 54px;
+  border-radius: 999px;
+  background: #1ea85f;
+  transform-origin: bottom center;
+}
+
+.fern::before,
+.fern::after {
+  content: "";
+  position: absolute;
+  bottom: 18px;
+  width: 46px;
+  height: 18px;
+  border-radius: 50%;
+  background: #33c777;
+}
+
+.fern::before {
+  right: 8px;
+  transform: rotate(-28deg);
+}
+
+.fern::after {
+  left: 8px;
+  transform: rotate(28deg);
+}
+
+.fern-one {
+  left: 7%;
+  transform: rotate(-8deg);
+}
+
+.fern-two {
+  left: 48%;
+  transform: scale(1.18);
+}
+
+.fern-three {
+  right: 7%;
+  transform: rotate(8deg);
+}
+
+.victory-card .primary-button {
+  margin-top: 20px;
+  padding: 0 28px;
+}
+
+.mega-overlay {
+  overflow: hidden;
+  padding: 0;
+  color: white;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(255, 213, 74, 0.45), transparent 24rem),
+    linear-gradient(180deg, #58b9ff 0%, #b8f1ff 28%, #2f9a56 62%, #0f3b2b 100%);
+}
+
+.mega-jungle {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.mega-sky,
+.mega-canopy,
+.mega-vines,
+.mega-ground {
+  position: absolute;
+  inset: 0;
+}
+
+.mega-sun {
+  position: absolute;
+  top: 7vh;
+  right: 11vw;
+  width: clamp(96px, 14vw, 180px);
+  height: clamp(96px, 14vw, 180px);
+  border-radius: 50%;
+  background: var(--sun);
+  box-shadow: 0 0 0 34px rgba(255, 213, 74, 0.24), 0 0 120px rgba(255, 213, 74, 0.78);
+  animation: sunPulse 1.4s ease-in-out infinite;
+}
+
+.mega-cloud {
+  position: absolute;
+  width: clamp(150px, 18vw, 280px);
+  height: clamp(42px, 5vw, 70px);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  animation: cloudDrift 16s ease-in-out infinite;
+}
+
+.mega-cloud::before,
+.mega-cloud::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: inherit;
+}
+
+.mega-cloud::before {
+  left: 16%;
+  top: -52%;
+  width: 44%;
+  height: 120%;
+}
+
+.mega-cloud::after {
+  right: 12%;
+  top: -38%;
+  width: 38%;
+  height: 105%;
+}
+
+.mega-cloud-one {
+  left: 6vw;
+  top: 10vh;
+}
+
+.mega-cloud-two {
+  left: 35vw;
+  top: 16vh;
+  transform: scale(0.78);
+  animation-delay: -5s;
+}
+
+.mega-cloud-three {
+  right: 10vw;
+  top: 24vh;
+  transform: scale(0.58);
+  animation-delay: -9s;
+}
+
+.mega-canopy span {
+  position: absolute;
+  bottom: 22vh;
+  width: clamp(130px, 16vw, 240px);
+  height: clamp(180px, 26vw, 360px);
+  background: #145f3f;
+  clip-path: polygon(50% 0, 66% 24%, 56% 24%, 82% 56%, 68% 56%, 100% 100%, 0 100%, 32% 56%, 18% 56%, 44% 24%, 34% 24%);
+  filter: drop-shadow(0 10px 0 rgba(0, 0, 0, 0.12));
+}
+
+.canopy-back span {
+  opacity: 0.72;
+  background: #185d45;
+}
+
+.canopy-front span {
+  background: #1d8d54;
+  animation: jungleSway 3.2s ease-in-out infinite;
+}
+
+.mega-canopy span:nth-child(1) { left: -5vw; transform: scale(1.18); }
+.mega-canopy span:nth-child(2) { left: 12vw; transform: scale(0.9); }
+.mega-canopy span:nth-child(3) { left: 30vw; transform: scale(1.26); }
+.mega-canopy span:nth-child(4) { left: 52vw; transform: scale(0.98); }
+.mega-canopy span:nth-child(5) { right: -3vw; transform: scale(1.24); }
+.mega-canopy span:nth-child(6) { right: 14vw; transform: scale(0.82); }
+
+.canopy-front span {
+  bottom: 16vh;
+}
+
+.mega-vines span {
+  position: absolute;
+  top: -2vh;
+  width: clamp(12px, 1.4vw, 22px);
+  height: clamp(120px, 24vh, 260px);
+  border-radius: 999px;
+  background: linear-gradient(#0d4f34, #28b769);
+  transform-origin: top center;
+  animation: vineSwing 2.6s ease-in-out infinite;
+}
+
+.mega-vines span::after {
+  content: "";
+  position: absolute;
+  left: -18px;
+  bottom: 24px;
+  width: 54px;
+  height: 28px;
+  border-radius: 50%;
+  background: #38cf77;
+  transform: rotate(-28deg);
+}
+
+.mega-vines span:nth-child(1) { left: 7vw; }
+.mega-vines span:nth-child(2) { left: 22vw; height: 32vh; animation-delay: -0.4s; }
+.mega-vines span:nth-child(3) { left: 41vw; height: 25vh; animation-delay: -1s; }
+.mega-vines span:nth-child(4) { right: 34vw; height: 30vh; animation-delay: -1.5s; }
+.mega-vines span:nth-child(5) { right: 18vw; height: 22vh; animation-delay: -2s; }
+.mega-vines span:nth-child(6) { right: 6vw; height: 28vh; animation-delay: -2.4s; }
+
+.mega-ground {
+  top: auto;
+  height: 24vh;
+  background:
+    radial-gradient(circle at 12% 0, #319d57 0 44px, transparent 45px),
+    radial-gradient(circle at 36% 12px, #43b969 0 54px, transparent 55px),
+    radial-gradient(circle at 68% 0, #319d57 0 46px, transparent 47px),
+    linear-gradient(180deg, #236d42 0%, #0f3928 100%);
+  box-shadow: inset 0 22px 0 rgba(91, 199, 103, 0.6);
+  z-index: 8;
+}
+
+.mega-message {
+  position: relative;
+  z-index: 12;
+  align-self: start;
+  margin-top: clamp(22px, 4vh, 44px);
+  padding: 16px clamp(18px, 5vw, 42px);
+  border: 6px solid var(--ink);
+  border-radius: 28px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.88);
+  text-align: center;
+  box-shadow: var(--shadow);
+  animation: victoryPop 900ms ease both;
+}
+
+.mega-message h2 {
+  margin: 0;
+  font-size: clamp(2.4rem, 7vw, 6.8rem);
+  line-height: 0.9;
+  font-weight: 1000;
+}
+
+.mega-message p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: clamp(1rem, 2.2vw, 1.55rem);
+  font-weight: 900;
+}
+
+.mega-message .primary-button {
+  margin-top: 14px;
+  padding: 0 28px;
+}
+
+.mega-dino {
+  position: absolute;
+  z-index: 7;
+}
+
+.mega-trex {
+  left: -460px;
+  bottom: 13vh;
+  transform: scale(1.35);
+  animation: megaTrexAcross 9s linear infinite;
+}
+
+.mega-trex .trex {
+  position: relative;
+  left: 0;
+  bottom: 0;
+  animation: none;
+}
+
+.raptor {
+  --raptor-green: #77c845;
+  --raptor-light: #96dc64;
+  --raptor-dark: rgba(37, 96, 36, 0.45);
+  --raptor-foot: #519537;
+  --raptor-scale: 1;
+  width: 190px;
+  height: 108px;
+  bottom: 13vh;
+  left: -220px;
+  animation: raptorRunAcross 5.8s linear infinite;
+}
+
+.raptor-two {
+  --raptor-green: #3aa7d8;
+  --raptor-light: #7cc8ec;
+  --raptor-dark: rgba(18, 83, 116, 0.48);
+  --raptor-foot: #2479a2;
+  --raptor-scale: 0.82;
+  bottom: 18vh;
+  animation-duration: 7.2s;
+  animation-delay: -3.6s;
+  z-index: 6;
+}
+
+.raptor span {
+  position: absolute;
+  display: block;
+}
+
+.raptor-shadow {
+  left: 44px;
+  bottom: -4px;
+  width: 140px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(8, 35, 24, 0.22);
+  filter: blur(1px);
+  animation: groundShadowPulse 360ms ease-in-out infinite;
+}
+
+.raptor-body {
+  left: 58px;
+  bottom: 34px;
+  width: 90px;
+  height: 48px;
+  border: 5px solid var(--ink);
+  border-radius: 56% 44% 48% 52%;
+  background: linear-gradient(135deg, var(--raptor-light), var(--raptor-green));
+  box-shadow: inset -10px -8px 0 rgba(0, 0, 0, 0.08);
+  animation: raptorBodyLean 360ms ease-in-out infinite;
+}
+
+.raptor-stripe {
+  width: 10px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--raptor-dark);
+  transform: rotate(18deg);
+  z-index: 4;
+}
+
+.raptor .stripe-a {
+  left: 88px;
+  bottom: 62px;
+}
+
+.raptor .stripe-b {
+  left: 116px;
+  bottom: 58px;
+  height: 22px;
+}
+
+.raptor-tail {
+  left: 2px;
+  bottom: 52px;
+  width: 74px;
+  height: 24px;
+  border: 5px solid var(--ink);
+  border-right: 0;
+  border-radius: 90% 10% 10% 90%;
+  background: var(--raptor-green);
+  transform-origin: right center;
+  animation: tailSway 420ms ease-in-out infinite;
+}
+
+.raptor-neck {
+  left: 130px;
+  bottom: 62px;
+  width: 34px;
+  height: 34px;
+  border: 5px solid var(--ink);
+  border-radius: 18px;
+  background: var(--raptor-green);
+  transform: rotate(-28deg);
+}
+
+.raptor-head {
+  left: 152px;
+  bottom: 82px;
+  width: 54px;
+  height: 36px;
+  border: 5px solid var(--ink);
+  border-radius: 45% 60% 42% 50%;
+  background: var(--raptor-green);
+  animation: raptorHeadSnap 360ms ease-in-out infinite;
+}
+
+.raptor-snout {
+  left: 188px;
+  bottom: 84px;
+  width: 34px;
+  height: 22px;
+  border: 5px solid var(--ink);
+  border-left: 0;
+  border-radius: 0 18px 14px 0;
+  background: var(--raptor-green);
+  z-index: 2;
+  animation: raptorHeadSnap 360ms ease-in-out infinite;
+}
+
+.raptor-eye {
+  left: 178px;
+  bottom: 103px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ink);
+  box-shadow: 0 0 0 3px white;
+  z-index: 4;
+  animation: dinoBlink 3.6s ease-in-out infinite;
+}
+
+.raptor-arm {
+  left: 128px;
+  bottom: 46px;
+  width: 30px;
+  height: 12px;
+  border: 4px solid var(--ink);
+  border-left: 0;
+  border-radius: 0 14px 14px 0;
+  background: var(--raptor-green);
+  transform-origin: left center;
+  z-index: 5;
+  animation: armWiggle 360ms ease-in-out infinite;
+}
+
+.raptor-leg {
+  width: 24px;
+  height: 54px;
+  border: 5px solid var(--ink);
+  border-radius: 14px;
+  background: var(--raptor-green);
+  transform-origin: top center;
+}
+
+.raptor .leg-front {
+  left: 118px;
+  bottom: 0;
+  animation: legFront 360ms ease-in-out infinite;
+}
+
+.raptor .leg-back {
+  left: 76px;
+  bottom: 0;
+  animation: legBack 360ms ease-in-out infinite;
+}
+
+.raptor-foot {
+  width: 42px;
+  height: 17px;
+  border: 4px solid var(--ink);
+  border-radius: 18px 12px 10px 10px;
+  background: var(--raptor-foot);
+  z-index: 5;
+}
+
+.raptor .foot-front {
+  left: 124px;
+  bottom: -2px;
+  animation: footFront 360ms ease-in-out infinite;
+}
+
+.raptor .foot-back {
+  left: 72px;
+  bottom: -2px;
+  animation: footBack 360ms ease-in-out infinite;
+}
+
+.longneck {
+  --longneck-scale: 1;
+  width: 330px;
+  height: 230px;
+  right: -390px;
+  bottom: 12vh;
+  animation: longneckStroll 14s linear infinite;
+  z-index: 5;
+}
+
+.longneck span {
+  position: absolute;
+  display: block;
+}
+
+.longneck-shadow {
+  left: 46px;
+  bottom: -8px;
+  width: 250px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(8, 35, 24, 0.2);
+  filter: blur(2px);
+  animation: groundShadowPulse 1.4s ease-in-out infinite;
+}
+
+.longneck-body {
+  left: 54px;
+  bottom: 36px;
+  width: 190px;
+  height: 82px;
+  border: 6px solid var(--ink);
+  border-radius: 56% 44% 48% 52%;
+  background: linear-gradient(135deg, #79d9ba, #5cc8a4 65%, #399a7c);
+  box-shadow: inset -16px -10px 0 rgba(0, 0, 0, 0.08);
+  animation: longneckBob 1.4s ease-in-out infinite;
+}
+
+.longneck-tail {
+  left: 0;
+  bottom: 72px;
+  width: 86px;
+  height: 30px;
+  border: 6px solid var(--ink);
+  border-right: 0;
+  border-radius: 90% 10% 10% 90%;
+  background: #5cc8a4;
+  transform-origin: right center;
+  animation: tailSwaySlow 1.4s ease-in-out infinite;
+}
+
+.longneck-neck {
+  left: 214px;
+  bottom: 92px;
+  width: 36px;
+  height: 118px;
+  border: 6px solid var(--ink);
+  border-radius: 999px;
+  background: #5cc8a4;
+  transform: rotate(-12deg);
+  transform-origin: bottom center;
+  animation: longneckNeckSway 2.8s ease-in-out infinite;
+}
+
+.longneck-head {
+  left: 230px;
+  bottom: 186px;
+  width: 68px;
+  height: 44px;
+  border: 6px solid var(--ink);
+  border-radius: 48% 58% 44% 52%;
+  background: #5cc8a4;
+  transform-origin: 15% 70%;
+  animation: longneckHeadNod 2.8s ease-in-out infinite;
+}
+
+.longneck-eye {
+  left: 266px;
+  bottom: 207px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ink);
+  box-shadow: 0 0 0 3px white;
+  animation: dinoBlink 5.2s ease-in-out infinite;
+}
+
+.longneck-leg {
+  width: 30px;
+  height: 64px;
+  border: 5px solid var(--ink);
+  border-radius: 14px;
+  background: #45ad8e;
+}
+
+.longneck .leg-one { left: 82px; bottom: 0; animation: longLegA 1.4s ease-in-out infinite; }
+.longneck .leg-two { left: 128px; bottom: 0; animation: longLegB 1.4s ease-in-out infinite; }
+.longneck .leg-three { left: 178px; bottom: 0; animation: longLegB 1.4s ease-in-out infinite; }
+.longneck .leg-four { left: 220px; bottom: 0; animation: longLegA 1.4s ease-in-out infinite; }
+
+.longneck-spot {
+  border-radius: 50%;
+  background: rgba(30, 113, 84, 0.45);
+  z-index: 4;
+}
+
+.spot-one {
+  left: 92px;
+  bottom: 82px;
+  width: 34px;
+  height: 22px;
+}
+
+.spot-two {
+  left: 150px;
+  bottom: 94px;
+  width: 28px;
+  height: 19px;
+}
+
+.spot-three {
+  left: 216px;
+  bottom: 144px;
+  width: 18px;
+  height: 30px;
+}
+
+.longneck-foot {
+  width: 42px;
+  height: 18px;
+  border: 5px solid var(--ink);
+  border-radius: 18px 16px 10px 10px;
+  background: #368a73;
+  z-index: 5;
+}
+
+.longneck .foot-one { left: 76px; bottom: -4px; animation: longFootA 1.4s ease-in-out infinite; }
+.longneck .foot-two { left: 122px; bottom: -4px; animation: longFootB 1.4s ease-in-out infinite; }
+.longneck .foot-three { left: 172px; bottom: -4px; animation: longFootB 1.4s ease-in-out infinite; }
+.longneck .foot-four { left: 214px; bottom: -4px; animation: longFootA 1.4s ease-in-out infinite; }
+
+.mega-fern {
+  position: absolute;
+  bottom: 36px;
+  width: 24px;
+  height: 80px;
+  border-radius: 999px;
+  background: #22b86b;
+  z-index: 11;
+}
+
+.mega-fern::before,
+.mega-fern::after {
+  content: "";
+  position: absolute;
+  bottom: 24px;
+  width: 72px;
+  height: 26px;
+  border-radius: 50%;
+  background: #40d67c;
+}
+
+.mega-fern::before {
+  right: 12px;
+  transform: rotate(-30deg);
+}
+
+.mega-fern::after {
+  left: 12px;
+  transform: rotate(30deg);
+}
+
+.fern-a { left: 5vw; }
+.fern-b { left: 26vw; transform: scale(1.18); }
+.fern-c { right: 24vw; transform: scale(0.92); }
+.fern-d { right: 6vw; transform: scale(1.25); }
+
+.confetti,
+.confetti::before,
+.confetti::after {
+  position: absolute;
+  inset: -20%;
+  content: "";
+  background-image:
+    radial-gradient(ellipse, #25b66d 0 7px, transparent 8px),
+    radial-gradient(ellipse, #8bd05b 0 6px, transparent 7px),
+    radial-gradient(circle, var(--sun) 0 5px, transparent 6px),
+    radial-gradient(circle, var(--coral) 0 5px, transparent 6px);
+  background-size: 120px 120px, 160px 160px, 190px 190px, 210px 210px;
+  animation: confettiFall 1.8s linear infinite;
+}
+
+.confetti::before {
+  transform: rotate(18deg);
+}
+
+.confetti::after {
+  transform: rotate(-14deg);
+}
+
+.shake {
+  animation: inputShake 360ms ease;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(22deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(18deg);
+  }
+}
+
+@keyframes flame {
+  from {
+    transform: scaleY(0.82);
+  }
+  to {
+    transform: scaleY(1.18);
+  }
+}
+
+@keyframes rocketBoost {
+  0% {
+    transform: translateY(0) rotate(22deg) scale(1);
+  }
+  35% {
+    transform: translateY(-34px) rotate(12deg) scale(1.12);
+  }
+  70% {
+    transform: translateY(8px) rotate(28deg) scale(0.96);
+  }
+  100% {
+    transform: translateY(0) rotate(22deg) scale(1);
+  }
+}
+
+@keyframes sunPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes cloudDrift {
+  0% {
+    transform: translateX(-18px);
+  }
+  50% {
+    transform: translateX(18px);
+  }
+  100% {
+    transform: translateX(-18px);
+  }
+}
+
+@keyframes birdGlide {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-12px) scale(1.08);
+  }
+}
+
+@keyframes jungleSway {
+  0%,
+  100% {
+    transform: translateX(-4px);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+}
+
+@keyframes vineSwing {
+  0%,
+  100% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(6deg);
+  }
+}
+
+@keyframes trexWalkAcross {
+  0% {
+    transform: translateX(0) translateY(0) rotate(0deg);
+  }
+  10% {
+    transform: translateX(calc(10vw + 40px)) translateY(-3px) rotate(-0.8deg);
+  }
+  25% {
+    transform: translateX(calc(25vw + 120px)) translateY(0) rotate(0.8deg);
+  }
+  50% {
+    transform: translateX(calc(50vw + 230px)) translateY(-4px) rotate(-0.6deg);
+  }
+  75% {
+    transform: translateX(calc(75vw + 330px)) translateY(0) rotate(0.7deg);
+  }
+  100% {
+    transform: translateX(calc(100vw + 470px)) translateY(-3px) rotate(0deg);
+  }
+}
+
+@keyframes groundShadowPulse {
+  0%,
+  100% {
+    transform: scaleX(0.92);
+    opacity: 0.22;
+  }
+  50% {
+    transform: scaleX(1.08);
+    opacity: 0.32;
+  }
+}
+
+@keyframes torsoBreath {
+  0%,
+  100% {
+    transform: translateY(0) scaleY(1);
+  }
+  50% {
+    transform: translateY(-2px) scaleY(1.025);
+  }
+}
+
+@keyframes bodyShineBreath {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-10deg);
+  }
+  50% {
+    transform: translateY(-2px) rotate(-10deg);
+  }
+}
+
+@keyframes bellyBreath {
+  0%,
+  100% {
+    transform: translateY(0) rotate(8deg);
+  }
+  50% {
+    transform: translateY(-2px) rotate(8deg) scaleY(1.02);
+  }
+}
+
+@keyframes trexHeadBob {
+  0%,
+  100% {
+    transform: rotate(0deg) translateY(0);
+  }
+  50% {
+    transform: rotate(-4deg) translateY(-4px);
+  }
+}
+
+@keyframes trexJawBob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes trexJawOpen {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(8deg);
+  }
+}
+
+@keyframes dinoBlink {
+  0%,
+  92%,
+  100% {
+    transform: scaleY(1);
+  }
+  95% {
+    transform: scaleY(0.15);
+  }
+}
+
+@keyframes tailSway {
+  0%,
+  100% {
+    transform: rotate(-17deg);
+  }
+  50% {
+    transform: rotate(-5deg);
+  }
+}
+
+@keyframes armWiggle {
+  0%,
+  100% {
+    transform: rotate(10deg);
+  }
+  50% {
+    transform: rotate(-16deg);
+  }
+}
+
+@keyframes legFront {
+  0%,
+  100% {
+    transform: rotate(-16deg);
+  }
+  50% {
+    transform: rotate(18deg);
+  }
+}
+
+@keyframes legBack {
+  0%,
+  100% {
+    transform: rotate(18deg);
+  }
+  50% {
+    transform: rotate(-16deg);
+  }
+}
+
+@keyframes kneeFront {
+  0%,
+  100% {
+    transform: translateX(-8px) translateY(4px);
+  }
+  50% {
+    transform: translateX(10px) translateY(-2px);
+  }
+}
+
+@keyframes kneeBack {
+  0%,
+  100% {
+    transform: translateX(10px) translateY(-2px);
+  }
+  50% {
+    transform: translateX(-8px) translateY(4px);
+  }
+}
+
+@keyframes footFront {
+  0%,
+  100% {
+    transform: translateX(-8px) rotate(-4deg);
+  }
+  50% {
+    transform: translateX(12px) rotate(7deg);
+  }
+}
+
+@keyframes footBack {
+  0%,
+  100% {
+    transform: translateX(12px) rotate(8deg);
+  }
+  50% {
+    transform: translateX(-10px) rotate(-6deg);
+  }
+}
+
+@keyframes megaTrexAcross {
+  from {
+    transform: translateX(0) scale(1.35);
+  }
+  to {
+    transform: translateX(calc(100vw + 760px)) scale(1.35);
+  }
+}
+
+@keyframes raptorRunAcross {
+  from {
+    transform: translateX(0) scale(var(--raptor-scale));
+  }
+  to {
+    transform: translateX(calc(100vw + 360px)) scale(var(--raptor-scale));
+  }
+}
+
+@keyframes raptorBodyLean {
+  0%,
+  100% {
+    transform: rotate(-2deg) translateY(0);
+  }
+  50% {
+    transform: rotate(3deg) translateY(-3px);
+  }
+}
+
+@keyframes raptorHeadSnap {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-3px) rotate(-3deg);
+  }
+}
+
+@keyframes longneckStroll {
+  from {
+    transform: translateX(0) scale(var(--longneck-scale));
+  }
+  to {
+    transform: translateX(calc(-100vw - 760px)) scale(var(--longneck-scale));
+  }
+}
+
+@keyframes longneckBob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes tailSwaySlow {
+  0%,
+  100% {
+    transform: rotate(-6deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+}
+
+@keyframes longneckNeckSway {
+  0%,
+  100% {
+    transform: rotate(-12deg);
+  }
+  50% {
+    transform: rotate(-7deg);
+  }
+}
+
+@keyframes longneckHeadNod {
+  0%,
+  100% {
+    transform: rotate(0deg) translateY(0);
+  }
+  50% {
+    transform: rotate(5deg) translateY(4px);
+  }
+}
+
+@keyframes longLegA {
+  0%,
+  100% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+}
+
+@keyframes longLegB {
+  0%,
+  100% {
+    transform: rotate(5deg);
+  }
+  50% {
+    transform: rotate(-4deg);
+  }
+}
+
+@keyframes longFootA {
+  0%,
+  100% {
+    transform: translateX(-4px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+}
+
+@keyframes longFootB {
+  0%,
+  100% {
+    transform: translateX(5px);
+  }
+  50% {
+    transform: translateX(-4px);
+  }
+}
+
+@keyframes pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.6) rotate(-8deg);
+  }
+  45% {
+    opacity: 1;
+    transform: scale(1.12) rotate(4deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+
+@keyframes nope {
+  0% {
+    opacity: 0;
+    transform: translateX(0) scale(0.86);
+  }
+  20% {
+    opacity: 1;
+    transform: translateX(-18px) scale(1);
+  }
+  40% {
+    transform: translateX(18px);
+  }
+  60% {
+    transform: translateX(-12px);
+  }
+  80% {
+    transform: translateX(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes victoryPop {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.86);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes confettiFall {
+  from {
+    background-position: 0 -160px, 30px -220px, 80px -260px, 150px -300px;
+  }
+  to {
+    background-position: 0 520px, 30px 580px, 80px 620px, 150px 660px;
+  }
+}
+
+@keyframes inputShake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-10px);
+  }
+  75% {
+    transform: translateX(10px);
+  }
+}
+
+@media (max-width: 760px) {
+  .game-shell {
+    width: min(100% - 18px, 560px);
+    padding: 10px 0;
+  }
+
+  .topbar,
+  .challenge-strip {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .scoreboard {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .scoreboard > div {
+    min-height: 62px;
+  }
+
+  .challenge-panel {
+    gap: 18px;
+    border-radius: 26px;
+  }
+
+  .problem {
+    min-height: 116px;
+    border-width: 5px;
+  }
+
+  .answer-row {
+    grid-template-columns: 1fr 82px;
+  }
+
+  .number-pad {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .mega-message {
+    margin-top: 18px;
+  }
+
+  .mega-trex {
+    transform: scale(0.92);
+    bottom: 16vh;
+    animation-name: megaTrexAcrossMobile;
+  }
+
+  .raptor {
+    --raptor-scale: 0.72;
+  }
+
+  .longneck {
+    --longneck-scale: 0.72;
+  }
+}
+
+@keyframes megaTrexAcrossMobile {
+  from {
+    transform: translateX(0) scale(0.92);
+  }
+  to {
+    transform: translateX(calc(100vw + 620px)) scale(0.92);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

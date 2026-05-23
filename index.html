@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#2868d8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Math Sean">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Math Challenge de Sean</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="game-shell">
+      <section class="topbar" aria-label="Progression">
+        <div>
+          <p class="eyebrow">Mission 1er primaire</p>
+          <h1>Math Challenge</h1>
+        </div>
+        <div class="scoreboard" aria-live="polite">
+          <div>
+            <span class="score-label">Réussites</span>
+            <strong><span id="streakCount">0</span>/20</strong>
+          </div>
+          <div>
+            <span class="score-label">Erreurs</span>
+            <strong><span id="mistakesCount">0</span>/3</strong>
+          </div>
+          <div>
+            <span class="score-label">Missions Dino</span>
+            <strong><span id="missionsCount">0</span>/5</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="challenge-panel" aria-label="Calcul">
+        <div class="mascot" aria-hidden="true">
+          <div class="rocket">
+            <span class="window"></span>
+            <span class="flame"></span>
+          </div>
+        </div>
+
+        <div class="progress-wrap" aria-label="Progression vers 20 bonnes réponses">
+          <div class="progress-track">
+            <div id="progressFill" class="progress-fill"></div>
+          </div>
+          <span id="progressText">Encore 20 pour gagner la mission</span>
+        </div>
+
+        <div id="problem" class="problem" aria-live="polite">3 + 2 = ?</div>
+
+        <div class="answer-row">
+          <input
+            id="answerInput"
+            type="text"
+            class="answer-input"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            maxlength="2"
+            autocomplete="off"
+            aria-label="Ta réponse"
+          >
+          <button id="checkButton" class="primary-button" type="button">OK</button>
+        </div>
+
+        <div class="number-pad" aria-label="Clavier des chiffres">
+          <button type="button" data-number="1" onclick="return pressNumber(event, '1')">1</button>
+          <button type="button" data-number="2" onclick="return pressNumber(event, '2')">2</button>
+          <button type="button" data-number="3" onclick="return pressNumber(event, '3')">3</button>
+          <button type="button" data-number="4" onclick="return pressNumber(event, '4')">4</button>
+          <button type="button" data-number="5" onclick="return pressNumber(event, '5')">5</button>
+          <button type="button" data-number="6" onclick="return pressNumber(event, '6')">6</button>
+          <button type="button" data-number="7" onclick="return pressNumber(event, '7')">7</button>
+          <button type="button" data-number="8" onclick="return pressNumber(event, '8')">8</button>
+          <button type="button" data-number="9" onclick="return pressNumber(event, '9')">9</button>
+          <button type="button" data-number="10" onclick="return pressNumber(event, '10')">10</button>
+          <button type="button" data-number="0" onclick="return pressNumber(event, '0')">0</button>
+          <button type="button" data-action="clear" onclick="return eraseAnswer(event)">Effacer</button>
+        </div>
+      </section>
+
+      <section class="challenge-strip" aria-label="Défi">
+        <div>
+          <span class="badge">Défi</span>
+          <strong>Réussis 5 missions Dino pour lancer la grande fête.</strong>
+        </div>
+        <button id="newGameButton" class="secondary-button" type="button">Nouvelle mission</button>
+      </section>
+    </main>
+
+    <div id="feedbackOverlay" class="feedback-overlay" aria-live="assertive" aria-hidden="true">
+      <div id="feedbackCard" class="feedback-card">
+        <div id="feedbackIcon" class="feedback-icon">★</div>
+        <p id="feedbackTitle">Bravo Sean !</p>
+        <span id="feedbackText">Continue comme ça.</span>
+      </div>
+    </div>
+
+    <div id="victoryOverlay" class="victory-overlay" aria-live="assertive" aria-hidden="true">
+      <div class="victory-card">
+        <div class="dino-scene" aria-hidden="true">
+          <div class="jungle-sky">
+            <span class="sunburst"></span>
+            <span class="cloud cloud-one"></span>
+            <span class="cloud cloud-two"></span>
+            <span class="bird bird-one"></span>
+            <span class="bird bird-two"></span>
+          </div>
+          <div class="jungle-layer jungle-back">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="jungle-layer jungle-mid">
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <div class="jungle-vines">
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <div class="trex-track">
+            <div class="trex">
+              <span class="trex-shadow"></span>
+              <span class="trex-tail"></span>
+              <span class="trex-body"></span>
+              <span class="trex-body-shine"></span>
+              <span class="trex-belly"></span>
+              <span class="trex-neck"></span>
+              <span class="trex-head"></span>
+              <span class="trex-snout"></span>
+              <span class="trex-jaw"></span>
+              <span class="trex-eye"></span>
+              <span class="trex-brow"></span>
+              <span class="trex-nostril"></span>
+              <span class="trex-teeth teeth-top"></span>
+              <span class="trex-teeth teeth-bottom"></span>
+              <span class="trex-arm arm-one"></span>
+              <span class="trex-arm arm-two"></span>
+              <span class="trex-leg leg-back"></span>
+              <span class="trex-leg leg-front"></span>
+              <span class="trex-knee knee-back"></span>
+              <span class="trex-knee knee-front"></span>
+              <span class="trex-foot foot-back"></span>
+              <span class="trex-foot foot-front"></span>
+              <span class="trex-claws claws-back"></span>
+              <span class="trex-claws claws-front"></span>
+              <span class="trex-stripe stripe-one"></span>
+              <span class="trex-stripe stripe-two"></span>
+              <span class="trex-stripe stripe-three"></span>
+            </div>
+          </div>
+          <div class="jungle-floor">
+            <span class="rock rock-one"></span>
+            <span class="rock rock-two"></span>
+            <span class="fern fern-one"></span>
+            <span class="fern fern-two"></span>
+            <span class="fern fern-three"></span>
+          </div>
+        </div>
+        <h2>Bravo Sean !</h2>
+        <p>Le T-Rex traverse la jungle pour fêter ta mission.</p>
+        <button id="playAgainButton" class="primary-button" type="button">Rejouer</button>
+      </div>
+      <div class="confetti" aria-hidden="true"></div>
+    </div>
+
+    <div id="megaOverlay" class="mega-overlay" aria-live="assertive" aria-hidden="true">
+      <div class="mega-jungle" aria-hidden="true">
+        <div class="mega-sky">
+          <span class="mega-sun"></span>
+          <span class="mega-cloud mega-cloud-one"></span>
+          <span class="mega-cloud mega-cloud-two"></span>
+          <span class="mega-cloud mega-cloud-three"></span>
+        </div>
+        <div class="mega-canopy canopy-back">
+          <span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="mega-canopy canopy-front">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="mega-vines">
+          <span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="mega-dino mega-trex">
+          <div class="trex">
+            <span class="trex-shadow"></span>
+            <span class="trex-tail"></span>
+            <span class="trex-body"></span>
+            <span class="trex-body-shine"></span>
+            <span class="trex-belly"></span>
+            <span class="trex-neck"></span>
+            <span class="trex-head"></span>
+            <span class="trex-snout"></span>
+            <span class="trex-jaw"></span>
+            <span class="trex-eye"></span>
+            <span class="trex-brow"></span>
+            <span class="trex-nostril"></span>
+            <span class="trex-teeth teeth-top"></span>
+            <span class="trex-teeth teeth-bottom"></span>
+            <span class="trex-arm arm-one"></span>
+            <span class="trex-arm arm-two"></span>
+            <span class="trex-leg leg-back"></span>
+            <span class="trex-leg leg-front"></span>
+            <span class="trex-knee knee-back"></span>
+            <span class="trex-knee knee-front"></span>
+            <span class="trex-foot foot-back"></span>
+            <span class="trex-foot foot-front"></span>
+            <span class="trex-claws claws-back"></span>
+            <span class="trex-claws claws-front"></span>
+            <span class="trex-stripe stripe-one"></span>
+            <span class="trex-stripe stripe-two"></span>
+            <span class="trex-stripe stripe-three"></span>
+          </div>
+        </div>
+        <div class="mega-dino raptor raptor-one">
+          <span class="raptor-shadow"></span><span class="raptor-tail"></span><span class="raptor-body"></span><span class="raptor-stripe stripe-a"></span><span class="raptor-stripe stripe-b"></span><span class="raptor-neck"></span><span class="raptor-head"></span><span class="raptor-snout"></span><span class="raptor-eye"></span><span class="raptor-arm"></span><span class="raptor-leg leg-back"></span><span class="raptor-leg leg-front"></span><span class="raptor-foot foot-back"></span><span class="raptor-foot foot-front"></span>
+        </div>
+        <div class="mega-dino raptor raptor-two">
+          <span class="raptor-shadow"></span><span class="raptor-tail"></span><span class="raptor-body"></span><span class="raptor-stripe stripe-a"></span><span class="raptor-stripe stripe-b"></span><span class="raptor-neck"></span><span class="raptor-head"></span><span class="raptor-snout"></span><span class="raptor-eye"></span><span class="raptor-arm"></span><span class="raptor-leg leg-back"></span><span class="raptor-leg leg-front"></span><span class="raptor-foot foot-back"></span><span class="raptor-foot foot-front"></span>
+        </div>
+        <div class="mega-dino longneck">
+          <span class="longneck-shadow"></span><span class="longneck-tail"></span><span class="longneck-body"></span><span class="longneck-spot spot-one"></span><span class="longneck-spot spot-two"></span><span class="longneck-spot spot-three"></span><span class="longneck-neck"></span><span class="longneck-head"></span><span class="longneck-eye"></span><span class="longneck-leg leg-one"></span><span class="longneck-leg leg-two"></span><span class="longneck-leg leg-three"></span><span class="longneck-leg leg-four"></span><span class="longneck-foot foot-one"></span><span class="longneck-foot foot-two"></span><span class="longneck-foot foot-three"></span><span class="longneck-foot foot-four"></span>
+        </div>
+        <div class="mega-ground">
+          <span class="mega-fern fern-a"></span><span class="mega-fern fern-b"></span><span class="mega-fern fern-c"></span><span class="mega-fern fern-d"></span>
+        </div>
+      </div>
+      <div class="mega-message">
+        <h2>Grande fête Dino !</h2>
+        <p>Sean a réussi 100 calculs.</p>
+        <button id="megaPlayAgainButton" class="primary-button" type="button">Rejouer</button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

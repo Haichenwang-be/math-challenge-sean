@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title>Math Challenge de Sean</title>
+  <rect width="512" height="512" rx="112" fill="#8fd6ff"/>
+  <circle cx="396" cy="106" r="54" fill="#ffd54a"/>
+  <path d="M58 376c46-70 102-103 170-98 59 5 93 42 144 42 31 0 61-14 92-43v171H58z" fill="#25b66d"/>
+  <path d="M87 402c55-72 114-95 177-69 34 14 56 42 99 42 34 0 64-16 101-50v123H87z" fill="#178c58"/>
+  <path d="M166 305c-8-41 10-75 56-102l58-34 31 50-59 35c-18 11-25 24-21 42z" fill="#ff8c42" stroke="#172033" stroke-width="18" stroke-linejoin="round"/>
+  <path d="M265 147c45-24 91-13 120 28l17 24-126 74-47-83z" fill="#ffb84d" stroke="#172033" stroke-width="18" stroke-linejoin="round"/>
+  <path d="M388 181l44 10-30 39z" fill="#ffb84d" stroke="#172033" stroke-width="18" stroke-linejoin="round"/>
+  <circle cx="345" cy="183" r="10" fill="#172033"/>
+  <path d="M312 221l52-30" stroke="#fffdf7" stroke-width="12" stroke-linecap="round"/>
+  <path d="M163 306l-69 40 93 25z" fill="#2868d8" stroke="#172033" stroke-width="18" stroke-linejoin="round"/>
+  <path d="M225 293l22 76 37-87z" fill="#2868d8" stroke="#172033" stroke-width="18" stroke-linejoin="round"/>
+  <text x="256" y="132" text-anchor="middle" font-family="ui-rounded, system-ui, sans-serif" font-size="86" font-weight="900" fill="#172033">10</text>
+  <text x="256" y="454" text-anchor="middle" font-family="ui-rounded, system-ui, sans-serif" font-size="62" font-weight="900" fill="#fffdf7" stroke="#172033" stroke-width="8" paint-order="stroke">MATH</text>
+</svg>
